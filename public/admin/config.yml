@@ -1,0 +1,112 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME  # Update this with your actual repo
+  branch: main
+  base_url: https://YOUR_DOMAIN.com  # Update with your actual domain
+  auth_endpoint: /api/auth
+
+# For local testing
+# local_backend: true
+
+media_folder: "src/assets"
+public_folder: "/src/assets"
+
+# Publish mode: editorial_workflow enables drafts
+publish_mode: editorial_workflow
+
+collections:
+  # Company Information
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "Company Information"
+        name: "company_info"
+        file: "src/content/company.json"
+        fields:
+          - { label: "Company Name", name: "company", widget: "string" }
+          - { label: "Phone", name: "phone", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Address", name: "address", widget: "text" }
+          - { label: "Hero Title", name: "heroTitle", widget: "string" }
+          - { label: "Hero Intro", name: "heroIntro", widget: "text" }
+      
+      - label: "Statistics"
+        name: "stats"
+        file: "src/content/stats.json"
+        fields:
+          - label: "Stats"
+            name: "stats"
+            widget: "list"
+            fields:
+              - { label: "Value", name: "value", widget: "string" }
+              - { label: "Label", name: "label", widget: "string" }
+      
+      - label: "Testimonial"
+        name: "testimonial"
+        file: "src/content/testimonial.json"
+        fields:
+          - { label: "Quote", name: "quote", widget: "text" }
+          - { label: "Name", name: "name", widget: "string" }
+          - { label: "Role", name: "role", widget: "string" }
+      
+      - label: "About Page Content"
+        name: "about_content"
+        file: "src/content/about.json"
+        fields:
+          - { label: "Pull Quote", name: "pullQuote", widget: "text" }
+          - label: "Why Nigeria Section"
+            name: "whyNigeria"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Intro", name: "intro", widget: "string" }
+              - { label: "Body", name: "body", widget: "text" }
+          - label: "Our Approach Section"
+            name: "ourApproach"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Body", name: "body", widget: "text" }
+          - label: "Government Relations"
+            name: "government"
+            widget: "object"
+            fields:
+              - { label: "Body", name: "body", widget: "text" }
+
+  # Services Collection
+  - name: "services"
+    label: "Services"
+    folder: "src/content/services"
+    create: true
+    slug: "{{number}}-{{slug}}"
+    fields:
+      - { label: "Number", name: "number", widget: "string" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Short Description", name: "description", widget: "text" }
+      - { label: "Full Detail", name: "detail", widget: "text" }
+
+  # Team Members Collection
+  - name: "team"
+    label: "Team Members"
+    folder: "src/content/team"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Subtitle (e.g., Nee Nwokoro)", name: "subtitle", widget: "string", required: false }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Bio", name: "bio", widget: "text" }
+      - { label: "Photo", name: "image", widget: "image" }
+      - { label: "Order", name: "order", widget: "number", default: 1 }
+
+  # Milestones Collection
+  - name: "milestones"
+    label: "Company Milestones"
+    folder: "src/content/milestones"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    fields:
+      - { label: "Year", name: "year", widget: "string" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "text", widget: "text" }
+      - { label: "Order", name: "order", widget: "number", default: 1 }
