@@ -1,8 +1,10 @@
 import { ArrowUpRight, User } from "lucide-react";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Footer, Header, PageHero } from "@/components/site";
-import { siteContent } from "@/lib/site-content";
+import { ImageModal } from "@/components/ImageModal";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useAboutContent, useTeamMembers, useMilestones } from "@/lib/hooks/useSupabaseData";
 import nigeriaImage from "@/assets/produce-2026.jpg";
 import founderImage from "@/assets/professional-headshot.jpg";
 import commercialImage from "@/assets/commercial-assistant.jpg";
@@ -10,13 +12,24 @@ import moneyImage from "@/assets/money-finance.jpg";
 import heroImage from "@/assets/download-33.jpg";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [
-    { title: "About Friscon Tech | Local insight for Nigeria" },
-    { name: "description", content: "Meet Friscon Tech, a Nigeria-based consultancy helping organisations enter markets and build durable partnerships." },
-    { property: "og:title", content: "About Friscon Tech | Local insight for Nigeria" },
-    { property: "og:description", content: "A Nigeria-based consultancy for market entry, stakeholder relations and inclusive growth." },
-    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ] }),
+  head: () => ({ 
+    meta: [
+      { title: "About Friscon Tech | Lagos-Based Nigeria Market Consultancy" },
+      { name: "description", content: "Meet the team at Friscon Tech, a Lagos-based consultancy helping international businesses navigate the Nigerian market. Expert local insight for market entry, stakeholder engagement, and agricultural partnerships." },
+      { property: "og:title", content: "About Friscon Tech | Lagos-Based Nigeria Market Consultancy" },
+      { property: "og:description", content: "Founded in Lagos, Friscon Tech provides expert guidance for businesses entering Nigeria. Local knowledge, trusted relationships, and practical solutions for market success." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://friscontech.com/about" },
+      { property: "og:locale", content: "en_NG" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "About Friscon Tech | Lagos-Based Nigeria Market Consultancy" },
+      { name: "twitter:description", content: "Expert Nigeria market consultancy based in Lagos with deep local insight and trusted partnerships." },
+      { name: "keywords", content: "Friscon Tech Lagos, Nigeria market consultancy, Lagos business advisors, Nigerian market experts, business consulting team Lagos, Chinenye Ketebu-Brown, Nigeria trade consulting" },
+      { name: "geo.region", content: "NG-LA" },
+      { name: "geo.placename", content: "Lagos, Nigeria" },
+      { name: "author", content: "Friscon Tech" },
+    ] 
+  }),
   component: About,
 });
 
@@ -29,6 +42,18 @@ function About() {
   const timelineRef = useScrollReveal<HTMLElement>();
   const imageDuoRef = useScrollReveal<HTMLElement>();
   const ctaRef = useScrollReveal<HTMLElement>();
+  
+  // Modal state for image lightbox
+  const [modalImage, setModalImage] = useState<{
+    url: string;
+    name: string;
+    title: string;
+  } | null>(null);
+  
+  // Fetch data from Supabase
+  const { data: aboutContent } = useAboutContent();
+  const { data: teamMembers } = useTeamMembers();
+  const { data: milestones } = useMilestones();
   
   return (
     <div className="site-shell">
@@ -46,7 +71,7 @@ function About() {
           <div className="container-wide">
             <div className="pull-quote">
               <div className="pull-quote-mark">"</div>
-              <p className="pull-quote-text">{siteContent.about.pullQuote}</p>
+              <p className="pull-quote-text">{aboutContent?.pull_quote}</p>
             </div>
           </div>
         </section>
@@ -66,9 +91,9 @@ function About() {
                 />
               </div>
               <div className="editorial-content">
-                <div className="eyebrow">{siteContent.about.whyNigeria.title}</div>
-                <h2 className="display editorial-title">{siteContent.about.whyNigeria.intro}</h2>
-                <p className="editorial-body">{siteContent.about.whyNigeria.body}</p>
+                <div className="eyebrow">{aboutContent?.why_nigeria_title}</div>
+                <h2 className="display editorial-title">{aboutContent?.why_nigeria_intro}</h2>
+                <p className="editorial-body">{aboutContent?.why_nigeria_body}</p>
               </div>
             </div>
           </div>
@@ -79,10 +104,10 @@ function About() {
           <div className="container-wide about-grid">
             <div>
               <div className="eyebrow">Our approach</div>
-              <h2 className="display">{siteContent.about.ourApproach.title}</h2>
+              <h2 className="display">{aboutContent?.our_approach_title}</h2>
             </div>
             <div>
-              <p>{siteContent.about.ourApproach.body}</p>
+              <p>{aboutContent?.our_approach_body}</p>
             </div>
           </div>
         </section>
@@ -91,7 +116,7 @@ function About() {
         <section ref={governmentRef.ref} className={`section section-tight animate-fade-rise ${governmentRef.isVisible ? "visible" : ""}`}>
           <div className="container-wide">
             <div className="centered-content">
-              <p className="large-text">{siteContent.about.government.body}</p>
+              <p className="large-text">{aboutContent?.government_body}</p>
             </div>
           </div>
         </section>
@@ -106,17 +131,44 @@ function About() {
               </div>
             </div>
             <div className="team-grid">
-              {siteContent.team_members.map((member) => (
-                <article key={member.id} className="team-card">
-                  <div className="team-photo-real">
-                    <img src={founderImage} alt={member.name} className="team-photo-img" />
-                  </div>
-                  <h3 className="team-name">{member.name}</h3>
-                  {member.subtitle && <div className="team-subtitle">{member.subtitle}</div>}
-                  <div className="team-title">{member.title}</div>
-                  <p className="team-bio">{member.bio}</p>
-                </article>
-              ))}
+              {teamMembers?.map((member, index) => {
+                const { ref, isVisible } = useScrollReveal<HTMLElement>();
+                return (
+                  <article 
+                    key={member.id} 
+                    ref={ref}
+                    className={`team-card animate-fade-rise ${isVisible ? "visible" : ""}`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div 
+                      className="team-photo-real"
+                      onClick={() => setModalImage({
+                        url: member.image_url || founderImage,
+                        name: member.name,
+                        title: member.title,
+                      })}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setModalImage({
+                            url: member.image_url || founderImage,
+                            name: member.name,
+                            title: member.title,
+                          });
+                        }
+                      }}
+                      aria-label={`View larger image of ${member.name}`}
+                    >
+                      <img src={member.image_url || founderImage} alt={member.name} className="team-photo-img" />
+                    </div>
+                    <h3 className="team-name">{member.name}</h3>
+                    {member.subtitle && <div className="team-subtitle">{member.subtitle}</div>}
+                    <div className="team-title">{member.title}</div>
+                    <p className="team-bio">{member.bio}</p>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -131,17 +183,21 @@ function About() {
               </div>
             </div>
             <div className="timeline-horizontal">
-              {siteContent.milestones.map((item, i) => (
-                <div 
-                  className="timeline-item" 
-                  key={item.year}
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                >
-                  <div className="timeline-item-year">{item.year}</div>
-                  <div className="timeline-item-title">{item.title}</div>
-                  <div className="timeline-item-text">{item.text}</div>
-                </div>
-              ))}
+              {milestones?.map((item, i) => {
+                const itemRef = useScrollReveal<HTMLDivElement>();
+                return (
+                  <div 
+                    ref={itemRef.ref}
+                    className={`timeline-item ${itemRef.isVisible ? "visible" : ""}`}
+                    key={item.id}
+                    style={{ animationDelay: `${i * 0.1}s` }}
+                  >
+                    <div className="timeline-item-year">{item.year}</div>
+                    <div className="timeline-item-title">{item.title}</div>
+                    <div className="timeline-item-text">{item.description}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -170,6 +226,18 @@ function About() {
         </section>
       </main>
       <Footer />
+      
+      {/* Image Modal */}
+      {modalImage && (
+        <ImageModal
+          isOpen={true}
+          onClose={() => setModalImage(null)}
+          imageUrl={modalImage.url}
+          altText={modalImage.name}
+          title={modalImage.name}
+          subtitle={modalImage.title}
+        />
+      )}
     </div>
   );
 }

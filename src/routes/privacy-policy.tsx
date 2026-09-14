@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Footer, Header } from "@/components/site";
-import { siteContent } from "@/lib/site-content";
+import { useSettings } from "@/lib/hooks/useSupabaseData";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 export const Route = createFileRoute("/privacy-policy")({
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/privacy-policy")({
 });
 
 function PrivacyPolicy() {
+  const { data: settings } = useSettings();
   const contentRef = useScrollReveal<HTMLElement>();
   
   return (
@@ -33,7 +34,7 @@ function PrivacyPolicy() {
             <div className="legal-content">
               <h2>1. Introduction</h2>
               <p>
-                {siteContent.settings.company} ("we," "our," or "us") is committed to protecting your privacy. 
+                {settings?.company_name} ("we," "our," or "us") is committed to protecting your privacy. 
                 This Privacy Policy explains how we collect, use, disclose, and safeguard your information when 
                 you visit our website or use our services.
               </p>
@@ -101,7 +102,7 @@ function PrivacyPolicy() {
                 <li>Object to processing of your personal information</li>
                 <li>Withdraw consent at any time</li>
               </ul>
-              <p>To exercise these rights, please contact us at {siteContent.settings.email}</p>
+              <p>To exercise these rights, please contact us at {settings?.email}</p>
 
               <h2>7. Cookies and Tracking Technologies</h2>
               <p>
@@ -131,9 +132,9 @@ function PrivacyPolicy() {
               <h2>11. Contact Us</h2>
               <p>If you have questions or concerns about this Privacy Policy, please contact us:</p>
               <ul>
-                <li><strong>Email:</strong> {siteContent.settings.email}</li>
-                <li><strong>Phone:</strong> {siteContent.settings.phone}</li>
-                <li><strong>Address:</strong> {siteContent.settings.address}</li>
+                <li><strong>Email:</strong> {settings?.email}</li>
+                <li><strong>Phone:</strong> {settings?.phone}</li>
+                <li><strong>Address:</strong> {settings?.address}</li>
               </ul>
             </div>
           </div>

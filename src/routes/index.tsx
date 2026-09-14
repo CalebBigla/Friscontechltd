@@ -5,17 +5,36 @@ import agricultureImage from "@/assets/smart-farming-biopesticides.jpg";
 import farmEmpowermentImage from "@/assets/farm-empowerment.jpg";
 import clientRelationshipsImage from "@/assets/client-relationships.jpg";
 import { Footer, Header } from "@/components/site";
-import { siteContent } from "@/lib/site-content";
 import { useScrollReveal, useCountUp } from "@/hooks/use-scroll-reveal";
+import { useSettings, useStatistics, useServices, useTestimonials } from "@/lib/hooks/useSupabaseData";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [
-    { title: "Friscon Tech | Your bridge to the Nigerian market" },
-    { name: "description", content: "Market entry strategy, stakeholder relations and agricultural value-chain development for Nigeria." },
-    { property: "og:title", content: "Friscon Tech | Your bridge to the Nigerian market" },
-    { property: "og:description", content: "Market entry strategy, stakeholder relations and agricultural value-chain development for Nigeria." },
-    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ], }),
+  head: () => ({ 
+    meta: [
+      { title: "Friscon Tech | Nigeria Market Entry Consulting in Lagos" },
+      { name: "description", content: "Lagos-based consulting firm specializing in Nigeria market entry strategy, stakeholder relations, and agricultural value-chain development. Expert guidance for businesses entering the Nigerian market." },
+      { property: "og:title", content: "Friscon Tech | Nigeria Market Entry Consulting in Lagos" },
+      { property: "og:description", content: "Expert Nigeria market entry consulting based in Lagos. We help international businesses navigate stakeholder relations, agricultural development, and business partnerships across Nigeria." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://friscontech.com/" },
+      { property: "og:locale", content: "en_NG" },
+      { property: "og:site_name", content: "Friscon Tech" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Friscon Tech | Nigeria Market Entry Consulting in Lagos" },
+      { name: "twitter:description", content: "Lagos-based consulting for Nigeria market entry, stakeholder relations, and agricultural development." },
+      { name: "keywords", content: "Nigeria market entry, Lagos business consulting, Nigerian market strategy, stakeholder relations Nigeria, agricultural development Nigeria, business consulting Lagos, market entry consulting, Nigeria trade partnerships" },
+      { name: "geo.region", content: "NG-LA" },
+      { name: "geo.placename", content: "Lagos" },
+      { name: "geo.position", content: "6.5244;3.3792" },
+      { name: "ICBM", content: "6.5244, 3.3792" },
+      { name: "author", content: "Friscon Tech" },
+      { name: "language", content: "English" },
+      { name: "coverage", content: "Nigeria" },
+      { name: "distribution", content: "global" },
+      { name: "rating", content: "general" },
+      { name: "revisit-after", content: "7 days" },
+    ], 
+  }),
   component: Home,
 });
 
@@ -77,6 +96,14 @@ function Home() {
   const imageGalleryRef = useScrollReveal<HTMLElement>();
   const ctaRef = useScrollReveal<HTMLElement>();
   
+  // Fetch data from Supabase
+  const { data: settings } = useSettings();
+  const { data: statistics } = useStatistics();
+  const { data: services } = useServices();
+  const { data: testimonials } = useTestimonials();
+  
+  const testimonial = testimonials?.[0];
+  
   return (
     <div className="site-shell">
       <Header />
@@ -86,8 +113,8 @@ function Home() {
           <div className="container-wide hero-content">
             <div className="eyebrow animate-rise">Nigeria, understood</div>
             <HeroTitle />
-            <p className="hero-copy animate-rise delay-2">{siteContent.settings.heroIntro}</p>
-            <div className="hero-actions animate-rise delay-2">
+            <p className="hero-copy animate-rise delay-2">{settings?.hero_intro}</p>
+            <div className="hero-actions animate-rise delay-3">
               <Link className="button-orange" to="/contact">Start a conversation <ArrowUpRight size={15} /></Link>
               <Link className="button-dark" to="/services">Explore our work <ArrowRight size={15} /></Link>
             </div>
@@ -103,8 +130,8 @@ function Home() {
         <section className="section-tight">
           <div className="container-wide">
             <div className="stats">
-              {siteContent.stats.map((stat, i) => (
-                <AnimatedStat key={stat.label} value={stat.value} label={stat.label} delay={i * 0.1} />
+              {statistics?.map((stat, i) => (
+                <AnimatedStat key={stat.id} value={stat.value} label={stat.label} delay={i * 0.1} />
               ))}
             </div>
           </div>
@@ -120,8 +147,8 @@ function Home() {
               <p className="section-intro">Nigeria rewards organisations that take the time to understand its people, institutions and possibilities. That is where we come in.</p>
             </div>
             <div className="service-grid">
-              {siteContent.services.map((service, i) => (
-                <AnimatedServiceCard key={service.number} service={service} index={i} />
+              {services?.map((service, i) => (
+                <AnimatedServiceCard key={service.id} service={service} index={i} />
               ))}
             </div>
           </div>
@@ -160,11 +187,13 @@ function Home() {
         
         <section ref={quoteRef.ref} className={`section animate-fade-rise ${quoteRef.isVisible ? "visible" : ""}`}>
           <div className="container-wide">
-            <div className="quote">
-              <div className="quote-mark">"</div>
-              <p className="quote-text">{siteContent.testimonial.quote}</p>
-              <p className="quote-meta"><strong>{siteContent.testimonial.name}</strong> · {siteContent.testimonial.role}</p>
-            </div>
+            {testimonial && (
+              <div className="quote">
+                <div className="quote-mark">"</div>
+                <p className="quote-text">{testimonial.quote}</p>
+                <p className="quote-meta"><strong>{testimonial.author_name}</strong> · {testimonial.author_role}</p>
+              </div>
+            )}
           </div>
         </section>
         

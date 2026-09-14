@@ -1,14 +1,16 @@
 import { ArrowUpRight, Instagram, Linkedin, Menu, X } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect, type ReactNode } from "react";
-import { siteContent } from "@/lib/site-content";
+import { useSettings } from "@/lib/hooks/useSupabaseData";
 import { WhatsAppButton } from "./WhatsAppButton";
+import { LocalBusinessStructuredData, WebsiteStructuredData, OrganizationStructuredData } from "./StructuredData";
 
 export function Logo() {
   return <span className="brand">frisco<span className="brand-tech">ntech</span></span>;
 }
 
 export function Header() {
+  const { data: settings } = useSettings();
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -33,8 +35,8 @@ export function Header() {
         <div className="container-wide utility-inner">
           <div>Market entry · stakeholder relations · value chains</div>
           <div className="utility-links">
-            <a href={`tel:${siteContent.settings.phone}`}>{siteContent.settings.phone}</a>
-            <a href={`mailto:${siteContent.settings.email}`}>{siteContent.settings.email}</a>
+            <a href={`tel:${settings?.phone}`}>{settings?.phone}</a>
+            <a href={`mailto:${settings?.email}`}>{settings?.email}</a>
             <span>Lagos · Nigeria</span>
             <a href="#social" aria-label="LinkedIn"><Linkedin size={13} /></a>
             <a href="#social" aria-label="Instagram"><Instagram size={13} /></a>
@@ -49,7 +51,7 @@ export function Header() {
               <Link key={href} to={href} className={`nav-link ${location.pathname === href ? "active" : ""}`}>{label}</Link>
             ))}
           </nav>
-          <a className="button-orange" href={`tel:${siteContent.settings.phone}`}>Call us <ArrowUpRight size={15} /></a>
+          <a className="button-orange" href={`tel:${settings?.phone}`}>Call us <ArrowUpRight size={15} /></a>
           <button className="mobile-menu" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((value) => !value)}>
             {open ? <X size={23} /> : <Menu size={23} />}
           </button>
@@ -61,12 +63,14 @@ export function Header() {
 }
 
 export function Footer() {
+  const { data: settings } = useSettings();
+  
   return (
     <footer className="footer" id="social">
       <div className="container-wide footer-grid">
         <div><Logo /><p className="footer-copy">Local insight. Trusted relationships. Practical progress. We help organisations build a meaningful future in Nigeria.</p></div>
         <div><div className="footer-heading">Explore</div><nav className="footer-links"><Link to="/about">About us</Link><Link to="/services">Our services</Link><Link to="/contact">Start a conversation</Link></nav></div>
-        <div><div className="footer-heading">Contact</div><div className="footer-links"><a href={`mailto:${siteContent.settings.email}`}>{siteContent.settings.email}</a><a href={`tel:${siteContent.settings.phone}`}>{siteContent.settings.phone}</a><span>{siteContent.settings.address}</span></div></div>
+        <div><div className="footer-heading">Contact</div><div className="footer-links"><a href={`mailto:${settings?.email}`}>{settings?.email}</a><a href={`tel:${settings?.phone}`}>{settings?.phone}</a><span>{settings?.address}</span></div></div>
       </div>
       <div className="container-wide footer-bottom">
         <span>© {new Date().getFullYear()} Friscon Tech Limited</span>
@@ -82,6 +86,9 @@ export function Footer() {
 export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="site-shell">
+      <LocalBusinessStructuredData />
+      <WebsiteStructuredData />
+      <OrganizationStructuredData />
       <Header />
       {children}
       <Footer />

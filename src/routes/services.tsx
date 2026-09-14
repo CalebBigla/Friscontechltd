@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Footer, Header, PageHero } from "@/components/site";
-import { siteContent } from "@/lib/site-content";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useServices } from "@/lib/hooks/useSupabaseData";
 import serviceImage from "@/assets/service-clarity.jpg";
 import logisticsImage from "@/assets/logistics-sector.jpg";
 import graduateImage from "@/assets/graduate-recruitment.jpg";
@@ -11,13 +11,23 @@ import careerImage from "@/assets/career-development.jpg";
 import heroImage from "@/assets/download-34.jpg";
 
 export const Route = createFileRoute("/services")({
-  head: () => ({ meta: [
-    { title: "Services | Friscon Tech" },
-    { name: "description", content: "Explore Friscon Tech services in market entry, stakeholder relations, partnership facilitation and agricultural value chains." },
-    { property: "og:title", content: "Services | Friscon Tech" },
-    { property: "og:description", content: "Practical consulting for organisations building a future in Nigeria." },
-    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ] }),
+  head: () => ({ 
+    meta: [
+      { title: "Services | Nigeria Market Entry & Agricultural Consulting | Friscon Tech Lagos" },
+      { name: "description", content: "Comprehensive Nigeria market entry services from Lagos: stakeholder relations, partnership facilitation, agricultural value chains, government liaison, and business development across Nigeria." },
+      { property: "og:title", content: "Nigeria Market Entry Services | Friscon Tech Lagos" },
+      { property: "og:description", content: "Expert consulting for Nigeria market entry, agricultural development, stakeholder engagement, and business partnerships. Based in Lagos, serving all of Nigeria." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://friscontech.com/services" },
+      { property: "og:locale", content: "en_NG" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Nigeria Market Entry Services | Friscon Tech Lagos" },
+      { name: "twitter:description", content: "Market entry strategy, agricultural consulting, and stakeholder relations for Nigeria." },
+      { name: "keywords", content: "Nigeria market entry services, agricultural consulting Nigeria, stakeholder relations Lagos, business partnership Nigeria, government liaison Nigeria, market strategy consulting, agricultural value chain Nigeria, Lagos business services" },
+      { name: "geo.region", content: "NG-LA" },
+      { name: "geo.placename", content: "Lagos, Nigeria" },
+    ] 
+  }),
   component: Services,
 });
 
@@ -51,6 +61,9 @@ function Services() {
   const imageRef2 = useScrollReveal<HTMLElement>();
   const imageRef3 = useScrollReveal<HTMLElement>();
   
+  // Fetch services from Supabase
+  const { data: services } = useServices();
+  
   return (
     <div className="site-shell">
       <Header />
@@ -78,29 +91,35 @@ function Services() {
         <section ref={serviceListRef.ref} className={`section animate-fade-rise ${serviceListRef.isVisible ? "visible" : ""}`}>
           <div className="container-wide">
             <div className="service-list">
-              {siteContent.services.map((service, i) => (
-                <AnimatedServiceDetail key={service.number} service={service} index={i} />
+              {services?.map((service, i) => (
+                <AnimatedServiceDetail key={service.id} service={service} index={i} />
               ))}
             </div>
           </div>
         </section>
         
         {/* Three-Image Grid Section */}
-        <section ref={imageRef3.ref} className={`section section-tight animate-fade-rise ${imageRef3.isVisible ? "visible" : ""}`}>
+        <section ref={imageRef3.ref} className={`section section-tight`}>
           <div className="container-wide">
             <div className="three-image-grid">
-              <div className="grid-image-card">
-                <img src={graduateImage} alt="Graduate recruitment and talent development" loading="lazy" />
-                <div className="grid-image-caption">Talent Development</div>
-              </div>
-              <div className="grid-image-card">
-                <img src={financialImage} alt="Financial analysis and market intelligence" loading="lazy" />
-                <div className="grid-image-caption">Market Intelligence</div>
-              </div>
-              <div className="grid-image-card">
-                <img src={careerImage} alt="Professional growth and career development" loading="lazy" />
-                <div className="grid-image-caption">Capacity Building</div>
-              </div>
+              {[
+                { img: graduateImage, alt: "Graduate recruitment and talent development", caption: "Talent Development" },
+                { img: financialImage, alt: "Financial analysis and market intelligence", caption: "Market Intelligence" },
+                { img: careerImage, alt: "Professional growth and career development", caption: "Capacity Building" }
+              ].map((item, index) => {
+                const cardRef = useScrollReveal<HTMLDivElement>();
+                return (
+                  <div 
+                    key={index}
+                    ref={cardRef.ref}
+                    className={`grid-image-card animate-fade-rise ${cardRef.isVisible ? "visible" : ""}`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <img src={item.img} alt={item.alt} loading="lazy" />
+                    <div className="grid-image-caption">{item.caption}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

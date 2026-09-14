@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Footer, Header } from "@/components/site";
-import { siteContent } from "@/lib/site-content";
+import { useSettings } from "@/lib/hooks/useSupabaseData";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 export const Route = createFileRoute("/terms-of-use")({
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/terms-of-use")({
 });
 
 function TermsOfUse() {
+  const { data: settings } = useSettings();
   const contentRef = useScrollReveal<HTMLElement>();
   
   return (
@@ -33,7 +34,7 @@ function TermsOfUse() {
             <div className="legal-content">
               <h2>1. Acceptance of Terms</h2>
               <p>
-                Welcome to {siteContent.settings.company}. By accessing or using our website and services, 
+                Welcome to {settings?.company_name}. By accessing or using our website and services, 
                 you agree to be bound by these Terms of Use. If you do not agree to these terms, please do 
                 not use our website or services.
               </p>
@@ -65,7 +66,7 @@ function TermsOfUse() {
               <h3>3.2 Intellectual Property</h3>
               <p>
                 All content on this website, including text, graphics, logos, images, and software, is the 
-                property of {siteContent.settings.company} or its licensors and is protected by Nigerian and 
+                property of {settings?.company_name} or its licensors and is protected by Nigerian and 
                 international copyright laws. You may not reproduce, distribute, or create derivative works 
                 without our express written permission.
               </p>
@@ -104,7 +105,7 @@ function TermsOfUse() {
 
               <h2>7. Limitation of Liability</h2>
               <p>
-                To the maximum extent permitted by Nigerian law, {siteContent.settings.company} shall not be 
+                To the maximum extent permitted by Nigerian law, {settings?.company_name} shall not be 
                 liable for any indirect, incidental, special, consequential, or punitive damages arising from:
               </p>
               <ul>
@@ -116,7 +117,7 @@ function TermsOfUse() {
 
               <h2>8. Indemnification</h2>
               <p>
-                You agree to indemnify, defend, and hold harmless {siteContent.settings.company}, its directors, 
+                You agree to indemnify, defend, and hold harmless {settings?.company_name}, its directors, 
                 officers, employees, and agents from any claims, liabilities, damages, losses, or expenses arising 
                 from your use of the website or violation of these Terms of Use.
               </p>
@@ -157,7 +158,7 @@ function TermsOfUse() {
               <h2>14. Entire Agreement</h2>
               <p>
                 These Terms of Use, together with our Privacy Policy and any specific service agreements, constitute 
-                the entire agreement between you and {siteContent.settings.company} regarding use of our website 
+                the entire agreement between you and {settings?.company_name} regarding use of our website 
                 and services.
               </p>
 
@@ -166,10 +167,10 @@ function TermsOfUse() {
                 For questions about these Terms of Use or to report violations, please contact us:
               </p>
               <ul>
-                <li><strong>Company:</strong> {siteContent.settings.company}</li>
-                <li><strong>Email:</strong> {siteContent.settings.email}</li>
-                <li><strong>Phone:</strong> {siteContent.settings.phone}</li>
-                <li><strong>Address:</strong> {siteContent.settings.address}</li>
+                <li><strong>Company:</strong> {settings?.company_name}</li>
+                <li><strong>Email:</strong> {settings?.email}</li>
+                <li><strong>Phone:</strong> {settings?.phone}</li>
+                <li><strong>Address:</strong> {settings?.address}</li>
               </ul>
 
               <p className="legal-acknowledgment">
