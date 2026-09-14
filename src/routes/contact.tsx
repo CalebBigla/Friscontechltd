@@ -212,10 +212,23 @@ function Contact() {
           </div>
         </section>
         
-        <section ref={mapRef.ref} className={`map-placeholder animate-fade-rise ${mapRef.isVisible ? "visible" : ""}`}>
+        <section ref={mapRef.ref} className={`map-section animate-fade-rise ${mapRef.isVisible ? "visible" : ""}`}>
           <div className="container-wide">
-            <span className="map-label">Victoria Island · Lagos</span>
-            <span className="map-cross">+</span>
+            <div className="map-container">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7286446916476!2d3.2861667!3d6.4302781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b1c1ec0f7af%3A0x3e1e1a1e1a1e1a1e!2sJakande%2C%20Lagos!5e0!3m2!1sen!2sng!4v1234567890"
+                width="100%"
+                height="500"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Friscon Tech Office Location - Jakande, Lagos"
+              />
+              <div className="map-overlay">
+                <span className="map-label">Jakande · Lagos, Nigeria</span>
+              </div>
+            </div>
           </div>
         </section>
       </main>

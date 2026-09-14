@@ -382,10 +382,11 @@
   .success-panel svg { color: var(--green); }
   .success-panel h2 { margin-top: 24px; font-size: 44px; }
   .success-panel p { margin-top: 14px; color: var(--muted-foreground); }
-  .map-placeholder { min-height: 250px; display: flex; align-items: center; background-color: var(--muted); background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; }
-  .map-placeholder .container-wide { display: flex; justify-content: space-between; align-items: center; }
-  .map-label { padding: 12px 16px; background: var(--paper); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-  .map-cross { color: var(--amber); font-family: var(--font-display); font-size: 70px; font-weight: 300; }
+  .map-section { position: relative; overflow: hidden; }
+  .map-container { position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 2px; }
+  .map-container iframe { display: block; width: 100%; height: 100%; filter: grayscale(0.3) contrast(1.1); }
+  .map-overlay { position: absolute; top: 24px; left: 24px; z-index: 10; pointer-events: none; }
+  .map-label { display: inline-block; padding: 12px 20px; background: var(--paper); color: var(--ink); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 4px 16px oklch(0 0 0 / 0.15); border-left: 3px solid var(--amber); }
   .whatsapp-button { position: fixed; bottom: 24px; right: 24px; z-index: 1000; width: 60px; height: 60px; border-radius: 50%; background: #25D366; color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1); animation: whatsapp-pulse 2s infinite; }
   .whatsapp-button:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6); }
   .whatsapp-button:active { transform: scale(0.95); }
@@ -490,6 +491,9 @@
     .timeline-text { grid-column: 2; }
     .service-detail { grid-template-columns: 1fr; gap: 18px; padding-block: 34px; }
     .form-row { grid-template-columns: 1fr; }
+    .map-container { height: 350px; }
+    .map-overlay { top: 16px; left: 16px; }
+    .map-label { padding: 10px 14px; font-size: 10px; }
     .legal-content h2 { font-size: 28px; margin-top: 48px; }
     .legal-content h3 { font-size: 20px; margin-top: 28px; }
     .legal-content ul { padding-left: 22px; }
