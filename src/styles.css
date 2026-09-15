@@ -445,10 +445,7 @@
     .hero-content { padding-bottom: 50px; }
     .hero-title { font-size: clamp(48px, 14vw, 76px); }
     .hero-copy { font-size: 15px; }
-    .spotlight { top: 28px; right: 16px; width: 205px; padding: 17px; }
-    .spotlight h3 { margin-top: 13px; font-size: 21px; }
-    .spotlight p { display: none; }
-    .spotlight a { margin-top: 14px; }
+    .spotlight { display: none; }
     .section { padding-block: 75px; }
     .section-header { display: block; margin-bottom: 35px; }
     .section-intro { margin-top: 20px; }
