@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { FormEvent, useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
@@ -218,8 +218,14 @@ function AdminLogin() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <a href="/" className="text-sm text-gray-600 hover:text-gray-900">
+          <div className="mt-6 text-center space-y-2">
+            <Link
+              to="/admin/forgot-password"
+              className="block text-sm text-green hover:text-green/80 font-medium"
+            >
+              Forgot your password?
+            </Link>
+            <a href="/" className="block text-sm text-gray-600 hover:text-gray-900">
               ← Back to website
             </a>
           </div>
