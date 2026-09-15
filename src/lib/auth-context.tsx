@@ -18,8 +18,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('[Auth] AuthProvider mounted, initializing...');
+    
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('[Auth] Initial session loaded:', { 
+        hasSession: !!session, 
+        hasUser: !!session?.user,
+        userId: session?.user?.id?.substring(0, 8) 
+      });
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -28,25 +35,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[Auth] State change:', { 
+        event, 
+        hasSession: !!session, 
+        hasUser: !!session?.user,
+        userId: session?.user?.id?.substring(0, 8)
+      });
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('[Auth] AuthProvider unmounting, cleaning up subscription');
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    console.log('[Auth] Attempting sign in');
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    console.log('[Auth] Sign in result:', { hasError: !!error, errorMessage: error?.message });
     return { error };
   };
 
   const signOut = async () => {
+    console.log('[Auth] Sign out requested');
     await supabase.auth.signOut();
+    console.log('[Auth] Sign out complete');
   };
 
   return (

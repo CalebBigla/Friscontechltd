@@ -1,13 +1,9 @@
 services:
   - type: web
     name: friscon-tech-website
-    runtime: node
-    plan: free
+    runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
-    envVars:
-      - key: NODE_VERSION
-        value: 18
     routes:
       - type: rewrite
         source: /*

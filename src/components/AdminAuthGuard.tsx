@@ -11,7 +11,14 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('[AuthGuard] State:', { 
+      loading, 
+      hasUser: !!user, 
+      pathname: window.location.pathname 
+    });
+    
     if (!loading && !user) {
+      console.log('[AuthGuard] No user detected, redirecting to login');
       navigate({ to: '/admin/login' });
     }
   }, [user, loading, navigate]);

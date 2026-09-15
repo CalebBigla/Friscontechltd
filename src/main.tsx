@@ -11,9 +11,16 @@ const router = getRouter();
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
-  root.render(
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  );
+  
+  // Only use StrictMode in development
+  // In production, StrictMode can cause auth issues with double-mounting
+  if (import.meta.env.DEV) {
+    root.render(
+      <StrictMode>
+        <RouterProvider router={router} />
+      </StrictMode>
+    );
+  } else {
+    root.render(<RouterProvider router={router} />);
+  }
 }
